@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- <title>{{ property.title }}</title> -->
+   <title>{{ property['bhk'] }} BHK {{ property['furnishing'] }} {{ property['type'] }} in {{ property['area_name'] }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .property-detail-wrapper {
+      max-width: 1200px;
+      margin: 100px auto 40px;
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .image-gallery {
+      flex: 1 1 60%;
+    }
+
+    .main-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      margin-bottom: 10px;
+    }
+
+    .thumbnail-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .thumbnail-row img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.3s ease;
+    }
+
+    .thumbnail-row img:hover {
+      border-color: #BE0C15;
+    }
+
+    .property-info {
+      flex: 1 1 35%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .property-info h2 {
+      font-size: 24px;
+      color: #BE0C15;
+    }
+
+    .price-tag {
+      font-size: 28px;
+      color: #BE0C15;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 20px;
+    }
+
+    .property-description {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .property-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-call, .btn-contact {
+      background: #BE0C15;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .btn-call:hover, .btn-contact:hover {
+      background: #a20a12;
+    }
+
+    .social-share {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .social-share a {
+      text-decoration: none;
+      color: #fff;
+      background: #333;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .social-share a.facebook { background: #3b5998; }
+    .social-share a.whatsapp { background: #25D366; }
+    .social-share a.twitter { background: #1DA1F2; }
+
+    @media (max-width: 768px) {
+      .property-detail-wrapper {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <script>
+    function setMainImage(src) {
+      document.getElementById("mainImage").src = src;
+    }
+  </script>
+</head>
+<body>
+  {% include 'header.html' %}
+<div class="property-detail-wrapper">
+  <!-- Image Section -->
+  <div class="image-gallery">
+    {% set image_list = property['image_filenames'].split(',') %}
+    <img id="main-display-image" src="{{ url_for('static', filename='images/' + image_list[0].strip()) }}" class="main-image" alt="Main Property Image">
+
+
+    <div class="thumbnail-row">
+      {% for img in image_list %}
+      <img src="{{ url_for('static', filename='images/' + img.strip()) }}" class="thumbnail">
+      {% endfor %}
+    </div>
+
+    <div class="social-share">
+      <span>Share:</span>
+      <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank">Facebook</a>
+      <a class="whatsapp" href="https://wa.me/?text={{ request.url }}" target="_blank">WhatsApp</a>
+      <a class="twitter" href="https://twitter.com/intent/tweet?url={{ request.url }}" target="_blank">Twitter</a>
+    </div>
+  </div>
+
+  <!-- Info Section -->
+  <div class="property-info">
+    <h1>{{ property['bhk'] }} BHK {{ property['furnishing'] }} {{ property['type'] }} in {{ property['area_name'] }}</h1>
+
+    <div class="price-tag">₹{{ "{:,}".format(property['price']) }}</div>
+
+    <div class="info-grid">
+      <div><strong>Area:</strong> {{ property['area'] }} sq. ft.</div>
+      <div><strong>Bathrooms:</strong> {{ property['bathroom'] }}</div>
+      <div><strong>Parking:</strong> {{ property['parking'] }}</div>
+      <div><strong>Status:</strong> {{ property['status'] }}</div>
+      <div><strong>Transaction:</strong> {{ property['transaction'] }}</div>
+      <div><strong>Rate/sqft:</strong> ₹{{ property['per_sqft'] }}</div>
+    </div>
+
+    <div class="property-description">
+      This {{ property['area'] }} sq. ft. {{ property['furnishing'] | lower }} apartment in the sought-after area of {{ property['area_name'] }} is now available. Offering {{ property['bhk'] }} well-ventilated bedrooms and {{ property['bathroom'] }} bathrooms, the home is thoughtfully designed for comfort and functionality. The property includes {{ property['parking'] }} dedicated parking space{{ "s" if property['parking']|int > 1 else "" }}.<br><br>
+      Situated in a {{ property['status'] | lower }} {{ property['transaction'] | lower }} construction, this apartment is part of a modern residential setup. With a rate of ₹{{ property['per_sqft'] }} per sq. ft., it presents a solid option for homebuyers seeking a blend of value and location.
+    </div>
+
+    <div class="property-buttons">
+      <a href="tel:+911234567890" class="btn-call">☎ Call Now</a>
+      <a href="/contact" class="btn-contact">✉ Contact Us</a>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const thumbnails = document.querySelectorAll(".thumbnail");
+    const mainImage = document.getElementById("main-display-image");
+
+    thumbnails.forEach(thumb => {
+      thumb.addEventListener("click", function () {
+        mainImage.src = this.src;
+      });
+    });
+  });
+</script>
+</html>

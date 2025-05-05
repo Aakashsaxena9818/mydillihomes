@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Property Price</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        // Object to store the localities for each area
+        const areas = {
+            'north-delhi': ['rohini', 'patel nagar', 'karol bagh', 'najafgarh', 'narela', 'kirti nagar', 'moti nagar'],
+            'south-delhi': ['greater kailash', 'okhla', 'janakpuri', 'kailash colony', 'new friends colony', 'maharani bagh', 'sarita vihar', 'vasant vihar', 'vasant kunj', 'mehrauli', 'geetanjali enclave', 'malviya nagar', 'saket', 'kalkaji', 'hauz khas', 'govindpuri'],
+            'east-delhi': ['naveen shahdara', 'shahdara', 'yamuna vihar', 'laxmi nagar', 'shastri park', 'dilshad garden', 'vasundhara enclave'],
+            'west-delhi': ['uttam nagar', 'paschim vihar', 'punjabi bagh', 'chittaranjan park'],
+            'central-delhi': ['chandni chowk', 'new delhi', 'green park']
+        };
+
+        // Function to update locality dropdown based on selected area
+        function updateLocalities() {
+            const areaSelect = document.querySelector("select[name='area_name']");
+            const localitySelect = document.querySelector("select[name='locality']");
+
+            // Clear current localities
+            localitySelect.innerHTML = '<option value="">Select Locality</option>';
+
+            const selectedArea = areaSelect.value;
+            if (selectedArea && areas[selectedArea]) {
+                areas[selectedArea].forEach(locality => {
+                    const option = document.createElement('option');
+                    option.value = locality;
+                    option.textContent = locality.charAt(0).toUpperCase() + locality.slice(1);
+                    localitySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="display-5">Predict Property Price</h1>
+            <p class="lead">Enter property details to estimate the price instantly</p>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="d-flex flex-column flex-md-row shadow rounded overflow-hidden" style="background-color: #fff;">
+              
+              <!-- Left Box: Image -->
+              <div class="predict-img-box w-100 w-md-50" style="background-color: #f4f4f4;">
+                <img src="{{ url_for('static', filename='images/2151912519.jpg') }}" alt="Property" class="img-fluid h-100 w-100" style="object-fit: cover;">
+              </div>
+      
+              <!-- Right Box: Form -->
+              <div class="p-4 w-100" style="background-color: #fff;">
+                <h3 class="text-center mb-4" style="color: #BE0C15;">Predict Property Price</h3>
+                <form method="POST">
+                    <div class="row">
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Area (in sqft)</label>
+                        <input type="number" name="area" class="form-control" required>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Area Name</label>
+                        <select name="area_name" class="form-control" required onchange="updateLocalities()">
+                          <option value="">Select Area</option>
+                          <option value="north-delhi">North Delhi</option>
+                          <option value="south-delhi">South Delhi</option>
+                          <option value="east-delhi">East Delhi</option>
+                          <option value="west-delhi">West Delhi</option>
+                          <option value="central-delhi">Central Delhi</option>
+                        </select>
+                      </div>
+                      
+                      <!-- Locality Select - Updated Dynamically -->
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Locality</label>
+                        <select name="locality" class="form-control" required>
+                          <option value="">Select Locality</option>
+                        </select>
+                      </div>
+                  
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">BHK</label>
+                        <input type="number" name="bhk" class="form-control" required>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Bathroom</label>
+                        <input type="number" name="bathroom" class="form-control" required>
+                      </div>
+                  
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Furnishing</label>
+                        <select name="furnishing" class="form-control" required>
+                          <option value="Furnished">Furnished</option>
+                          <option value="Semi-Furnished">Semi-Furnished</option>
+                          <option value="Unfurnished">Unfurnished</option>
+                        </select>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Parking</label>
+                        <input type="number" name="parking" class="form-control" required>
+                      </div>
+                  
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-control" required>
+                          <option value="Ready to move">Ready to move</option>
+                          <option value="Under Construction">Under Construction</option>
+                        </select>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Transaction</label>
+                        <select name="transaction" class="form-control" required>
+                          <option value="New Property">New Property</option>
+                          <option value="Resale">Resale</option>
+                        </select>
+                      </div>
+                  
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label">Property Type</label>
+                        <select name="type" class="form-control" required>
+                          <option value="Apartment">Apartment</option>
+                          <option value="Independent House">Independent House</option>
+                          <option value="Builder Floor">Builder Floor</option>
+                        </select>
+                      </div>
+                    </div>
+                  
+                    <button type="submit" class="btn btn-danger w-100 mt-2" style="background-color: #BE0C15;">Predict Price</button>
+                  </form>
+      
+                {% if prediction %}
+                <div class="text-center mt-4 p-3 bg-light border rounded">
+                  <h5>Estimated Price:</h5>
+                  <h3 style="color: #BE0C15;">₹ {{ prediction | round(2) }}</h3>
+                </div>
+                {% endif %}
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    {% include 'footer.html' %}
+</body>
+</html>

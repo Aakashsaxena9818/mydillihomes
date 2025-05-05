@@ -1,0 +1,116 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="cta-section text-white text-center py-5" style="background-color: #BE0C15;">
+    <div class="container">
+      <h2 class="mb-3">Looking to Buy or Sell Property in Delhi?</h2>
+      <p class="mb-4">Contact us today to get the best property deals across all major Delhi locations.</p>
+      <a href="/contact-us" class="btn btn-light px-4 py-2">Contact Now</a>
+    </div>
+  </section>
+<footer class="footer-section bg-black text-white pt-5 pb-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <a href="/">
+            <img src="{{ url_for('static', filename='images/my-dilli-homes-white-logo.png') }}" alt="Logo" class="footer-logo">
+          </a>
+          <p>Your trusted partner for property buying, selling, and valuation in Delhi. Explore by location and find your dream home.</p>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <h5 class="text-uppercase">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="/about-us" class="text-white text-decoration-none">About Us</a></li>
+            <li><a href="/price-predictor" class="text-white text-decoration-none">Price Predictor</a></li>
+            <li><a href="/contact-us" class="text-white text-decoration-none">Contact Us</a></li>
+          </ul>
+        </div>
+  
+        <div class="col-md-4 mb-4">
+          <h5 class="text-uppercase">Explore Locations</h5>
+          <ul class="list-unstyled">
+            <li><a href="/north-delhi.html" class="text-white text-decoration-none">North Delhi</a></li>
+            <li><a href="/south-delhi.html" class="text-white text-decoration-none">South Delhi</a></li>
+            <li><a href="/east-delhi.html" class="text-white text-decoration-none">East Delhi</a></li>
+            <li><a href="/west-delhi.html" class="text-white text-decoration-none">West Delhi</a></li>
+            <li><a href="/central-delhi.html" class="text-white text-decoration-none">Central Delhi</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 border-top pt-3" style="border-color: rgba(255,255,255,0.2);">
+        <p class="mb-0">&copy; {{ current_year }} My Dilli Homes. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+    
+</body>
+</html> -->
+<!-- templates/footer.html -->
+
+<!-- CTA Section -->
+<section class="cta-section text-white text-center py-5" style="background-color: #BE0C15;">
+  <div class="container">
+    <h2 class="mb-3">Looking to Buy or Sell Property in Delhi?</h2>
+    <p class="mb-4">Contact us today to get the best property deals across all major Delhi locations.</p>
+    <a href="{{ url_for('contact_us') }}" class="btn btn-light px-4 py-2" aria-label="Contact Us">Contact Now</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-section bg-black text-white pt-5 pb-3">
+  <div class="container">
+    <div class="row">
+      <!-- Logo & About -->
+      <div class="col-md-4 mb-4">
+        <a href="{{ url_for('home') }}" aria-label="MyDilliHomes Home">
+          <img src="{{ url_for('static', filename='images/my-dilli-homes-white-logo.png') }}"
+               alt="My Dilli Homes Logo" class="footer-logo">
+        </a>
+        <p>Your trusted partner for property buying, selling, and valuation in Delhi. Explore by location and find your dream home.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-4 mb-4">
+        <h5 class="text-uppercase">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ url_for('home') }}" class="text-white text-decoration-none" aria-label="Home">Home</a></li>
+          <li><a href="{{ url_for('about') }}" class="text-white text-decoration-none" aria-label="About Us">About Us</a></li>
+          <li><a href="{{ url_for('predict') }}" class="text-white text-decoration-none" aria-label="Price Predictor">Price Predictor</a></li>
+          <li><a href="{{ url_for('contact_us') }}" class="text-white text-decoration-none" aria-label="Contact Us">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Locations -->
+      <div class="col-md-4 mb-4">
+        <h5 class="text-uppercase">Explore Locations</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ url_for('region_page', region='north-delhi') }}"
+                 class="text-white text-decoration-none" aria-label="North Delhi">North Delhi</a></li>
+          <li><a href="{{ url_for('region_page', region='south-delhi') }}"
+                 class="text-white text-decoration-none" aria-label="South Delhi">South Delhi</a></li>
+          <li><a href="{{ url_for('region_page', region='east-delhi') }}"
+                 class="text-white text-decoration-none" aria-label="East Delhi">East Delhi</a></li>
+          <li><a href="{{ url_for('region_page', region='west-delhi') }}"
+                 class="text-white text-decoration-none" aria-label="West Delhi">West Delhi</a></li>
+          <li><a href="{{ url_for('region_page', region='central-delhi') }}"
+                 class="text-white text-decoration-none" aria-label="Central Delhi">Central Delhi</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="text-center mt-4 border-top pt-3" style="border-color: rgba(255,255,255,0.2);">
+      <p class="mb-0">&copy; {{ current_year }} My Dilli Homes. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>

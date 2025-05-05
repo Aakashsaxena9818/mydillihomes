@@ -1,0 +1,68 @@
+<!-- templates/filter_form.html -->
+<form method="get">
+    <div class="mb-3">
+      <label for="min_price" class="form-label">Min Price (₹)</label>
+      <input type="number" id="min_price" name="min_price"
+             class="form-control"
+             placeholder="e.g. 500000"
+             value="{{ request.args.get('min_price','') }}">
+    </div>
+    <div class="mb-3">
+      <label for="max_price" class="form-label">Max Price (₹)</label>
+      <input type="number" id="max_price" name="max_price"
+             class="form-control"
+             placeholder="e.g. 20000000"
+             value="{{ request.args.get('max_price','') }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Area (sq ft)</label>
+      <div class="d-flex gap-2">
+        <input type="number" name="min_area"
+               class="form-control"
+               placeholder="Min"
+               min="100" max="25000"
+               value="{{ request.args.get('min_area','') }}">
+        <input type="number" name="max_area"
+               class="form-control"
+               placeholder="Max"
+               min="100" max="25000"
+               value="{{ request.args.get('max_area','') }}">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="bhk" class="form-label">BHK</label>
+      <select id="bhk" name="bhk" class="form-select">
+        <option value="">Any</option>
+        {% for i in range(1,8) %}
+        <option value="{{ i }}" {% if request.args.get('bhk') == i~'' %}selected{% endif %}>{{ i }} BHK</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="furnishing" class="form-label">Furnishing</label>
+      <select id="furnishing" name="furnishing" class="form-select">
+        <option value="">Any</option>
+        {% for f,v in [('Furnished','Furnished'),('Semi-Furnished','Semi-Furnished'),('Unfurnished','Unfurnished')] %}
+        <option value="{{ f }}" {% if request.args.get('furnishing')==f %}selected{% endif %}>{{ v }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" name="status" class="form-select">
+        <option value="">Any</option>
+        <option value="Ready_to_move" {% if request.args.get('status')=='Ready_to_move' %}selected{% endif %}>Ready to Move</option>
+        <option value="Almost_ready"   {% if request.args.get('status')=='Almost_ready'   %}selected{% endif %}>Almost Ready</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="type" class="form-label">Property Type</label>
+      <select id="type" name="type" class="form-select">
+        <option value="">Any</option>
+        <option value="Apartment"     {% if request.args.get('type')=='Apartment'     %}selected{% endif %}>Apartment</option>
+        <option value="Builder_Floor" {% if request.args.get('type')=='Builder_Floor' %}selected{% endif %}>Builder Floor</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+  </form>
+  

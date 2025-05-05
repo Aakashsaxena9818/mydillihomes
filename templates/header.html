@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <header class="custom-header">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a href="/" class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+      </a>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav class="nav-menu" id="navMenu">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="{{ url_for('about') }}">About Us</a></li>
+          <li class="has-submenu">
+            <a href="#">Locations ▾</a>
+            <ul class="submenu">
+              <li><a href="{{ url_for('region_page', region='north-delhi') }}">North Delhi</a></li>
+              <li><a href="{{ url_for('region_page', region='south-delhi') }}">South Delhi</a></li>
+              <li><a href="{{ url_for('region_page', region='east-delhi') }}">East Delhi</a></li>
+              <li><a href="{{ url_for('region_page', region='west-delhi') }}">West Delhi</a></li>
+              <li><a href="{{ url_for('region_page', region='central-delhi') }}">Central Delhi</a></li>
+            </ul>
+          </li>
+          <li><a href="/predict">Price Predictor</a></li>
+          <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+          <li><a href="tel:+1234567890" class="call-btn">Call Now</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    const submenuToggle = document.querySelector('.has-submenu > a');
+
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+
+    submenuToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenuToggle.parentElement.classList.toggle('open');
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        navMenu.classList.remove('active');
+        document.querySelector('.has-submenu')?.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

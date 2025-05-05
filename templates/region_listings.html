@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ region.replace('-', ' ').title() }} Properties</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+  {% include 'header.html' %}
+  
+  <!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <h1 class="display-4 text-capitalize">{{ region.replace('-', ' ') }}</h1>
+    <p class="lead">Explore top properties in {{ region.replace('-', ' ').title() }} tailored to your preferences</p>
+  </div>
+</section>
+
+  <div class="container">
+    <div class="row">
+      <!-- Desktop Sidebar -->
+      <aside class="col-md-3 d-none d-md-block">
+        <div class="p-3 mb-4" style="background: #f8f8f8; border-radius: 8px; border: 1px solid #ddd;">
+          <h5 class="mb-3" style="color: #BE0C15;">Filter</h5>
+          {% include 'filter_form.html' %}
+        </div>
+      </aside>
+
+      <!-- Main Listings -->
+      <div class="col-md-9">
+        <!-- Mobile Filter Button -->
+        <div class="d-md-none text-end mb-3">
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+            Filter
+          </button>
+        </div>
+
+        <!-- Listings Grid -->
+        <div class="row" id="property-listings-row">
+          {% for property in properties[:12] %}
+            {% set imgs = property['image_filenames'].split(',') %}
+            {% set first = imgs[0].strip() %}
+            {% set type_fmt = property['type'].replace('_', ' ') %}
+            {% set slug = property['bhk'] ~ '-bhk-' ~ property['furnishing'].lower() ~ '-' ~ type_fmt.lower().replace(' ', '-') ~ '-in-' ~ property['area_name'].lower().replace(' ', '-') %}
+            <div class="col-12 col-sm-6 col-md-4 mb-4 d-flex">
+              <div class="property-card w-100 d-flex flex-column">
+                <!-- Badge for property type with formatted text -->
+                <span class="badge" style="background-color:#BE0C15;color:#fff;position:absolute;margin:10px;">
+                  {{ type_fmt }} <!-- This will display "Builder Floor" instead of "Builder_Floor" -->
+                </span>
+                <img src="{{ url_for('static', filename='images/' + first) }}" alt="{{ property['area_name'] }}" class="img-fluid mb-2">
+                <h4>{{ property['bhk'] }} BHK {{ property['furnishing'] }} {{ type_fmt }} in {{ property['area_name'] }}</h4>
+                <p class="price">&#8377; {{ "{:,}".format(property['price']) }}</p>
+                <a href="{{ url_for('property_details', slug=slug) }}" class="btn btn-primary mt-auto">View Details</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        
+
+        <!-- Load More Button Below Listings -->
+        {% if properties|length > 12 %}
+        <div class="text-center mt-4">
+          <button id="load-more-btn" class="btn btn-outline-primary">Load More</button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Filter Modal -->
+  <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Filter Properties</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% include 'filter_form.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Load More Script -->
+  <script>
+    const allProps = {{ properties|tojson|safe }};
+    let visible = 12;
+    const container = document.getElementById('property-listings-row');
+    document.getElementById('load-more-btn')?.addEventListener('click', function() {
+      for (let i = visible; i < visible + 12 && i < allProps.length; i++) {
+        const p = allProps[i];
+        const imgs = p.image_filenames.split(',');
+        const first = imgs[0].trim();
+        const typeFmt = p.type.replace('_',' ');
+        const slug = `${p.bhk}-bhk-${p.furnishing.toLowerCase()}-${typeFmt.toLowerCase().replace(/ /g,'-')}-in-${p.area_name.toLowerCase().replace(/ /g,'-')}`;
+        const col = document.createElement('div');
+        col.className = 'col-12 col-sm-6 col-md-4 mb-4 d-flex';
+        col.innerHTML = `
+          <div class="property-card w-100 d-flex flex-column">
+            <span class="badge" style="background-color:#BE0C15;color:#fff;position:absolute;margin:10px;">${p.type.replace('_',' ')}</span>
+            <img src="/static/images/${first}" class="img-fluid mb-2" alt="${p.area_name}">
+            <h4>${p.area_name.charAt(0).toUpperCase() + p.area_name.slice(1)} - ${p.bhk} BHK</h4>
+            <p class="price">&#8377; ${p.price.toLocaleString()}</p>
+            <a href="/property/${slug}" class="btn btn-primary mt-auto">View Details</a>
+          </div>`;
+        container.appendChild(col);
+      }
+      visible += 12;
+      if (visible >= allProps.length) this.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

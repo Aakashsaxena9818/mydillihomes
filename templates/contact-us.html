@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us - My Dilli Homes</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+  <div class="hero">
+    <h1>Contact Us</h1>
+    <p>Have questions? We'd love to hear from you.</p>
+  </div>
+
+<div class="contact-form-container">
+    <h2>Send a Message</h2>
+    <form class="contact-form" action="#" method="post">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% include 'footer.html' %}
+</body>
+</html>

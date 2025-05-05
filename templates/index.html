@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Buy Your Dream Home in Delhi - My Dilli Homes</title>
+<body>
+{% include 'header.html' %}
+<!-- Hero Section -->
+<section style="background: url('{{ url_for('static', filename='images/bannerbg.jpg') }}') no-repeat center center/cover; color: white; padding: 100px 20px; text-align: center;">
+<h1 style="font-size: 48px; margin-bottom: 20px; text-shadow: 1px 1px 5px rgba(0,0,0,0.5);">
+    Find Your Dream Home in Delhi
+</h1>
+<p style="font-size: 20px; margin-bottom: 30px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+    Find properties, predict prices, and make smart decisions with MyDilliHomes
+</p>
+<a href="/predict" style="
+    background-color: white;
+    color: #BE0C15;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+">
+    Predict Property Price
+</a>
+</section>
+
+    <!-- Search Bar Section -->
+    <section style="background-color: #f8f8f8; padding: 40px 20px;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <form action="/property" method="GET" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+                <input type="text" name="area_name" placeholder="Enter Area Name" style="padding: 12px; flex: 1; border: 1px solid #ccc; border-radius: 8px;">
+                <select name="bhk" style="padding: 12px; flex: 1; border: 1px solid #ccc; border-radius: 8px;">
+                    <option value="">Select BHK</option>
+                    <option>1 BHK</option>
+                    <option>2 BHK</option>
+                    <option>3 BHK</option>
+                    <option>4 BHK</option>
+                    <option>5+ BHK</option>
+                </select>
+                <select name="type" style="padding: 12px; flex: 1; border: 1px solid #ccc; border-radius: 8px;">
+                  <option value="">Select Property Type</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Builder Floor">Builder Floor</option>
+                </select>
+                <button type="submit" style="background-color: #BE0C15; color: white; padding: 12px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    Search
+                </button>
+            </form>
+        </div>
+  </section>
+
+<!-- Feature Section -->
+<section id="features" class="features-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">Featured Properties</h2>
+    <div class="row justify-content-center">
+      {% for property in featured_properties %}
+        <div class="col-12 col-sm-6 col-md-3 d-flex">
+          <div class="property-card w-100">
+            <!-- Property Type Badge -->
+            <span class="badge" style="background-color: #BE0C15; color: white; position: absolute; margin: 10px;">
+              {{ property['type'].replace('_', ' ') }} <!-- Formatted property type here -->
+            </span>
+            {% set image_filenames = property['image_filenames'].split(',') %}
+            {% set first_image = image_filenames[0].strip() if image_filenames else 'default.jpg' %}
+            {% set type_formatted = property['type'].replace('_', ' ') %} <!-- Store formatted type -->
+            {% set slug = property['bhk'] ~ '-bhk-' ~ property['furnishing'].lower() ~ '-' ~ type_formatted.lower().replace(' ', '-') ~ '-in-' ~ property['area_name'].lower().replace(' ', '-') %}
+            <img src="{{ url_for('static', filename='images/' + first_image) }}" alt="Featured Property" class="img-fluid">
+            <h4>{{ property['bhk'] }} BHK {{ property['furnishing'] }} {{ type_formatted }} in {{ property['area_name'] }}</h4> <!-- Use formatted type here -->
+            <p class="price">₹{{ property['price'] }}</p>
+            <a href="{{ url_for('property_details', slug=slug )}}" class="btn btn-primary mt-auto">View Details</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Region Properties Section -->
+{% for region, properties in region_properties.items() %}
+<section class="region-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-4 text-capitalize">Properties in {{ region.replace('-', ' ') }}</h2>
+    <div class="row">
+      {% for property in properties %}
+        <div class="col-12 col-sm-6 col-md-3 d-flex">
+          <div class="property-card w-100">
+            <!-- Property Type Badge -->
+            <span class="badge" style="background-color: #BE0C15; color: white; position: absolute; margin: 10px;">
+              {{ property['type'].replace('_', ' ') }} <!-- Formatted property type here -->
+            </span>
+            {% set image_filenames = property['image_filenames'].split(',') %}
+            {% set first_image = image_filenames[0].strip() if image_filenames else 'default.jpg' %}
+            {% set type_formatted = property['type'].replace('_', ' ') %} <!-- Store formatted type -->
+            {% set slug = property['bhk'] ~ '-bhk-' ~ property['furnishing'].lower() ~ '-' ~ type_formatted.lower().replace(' ', '-') ~ '-in-' ~ property['area_name'].lower().replace(' ', '-') %}
+            <img src="{{ url_for('static', filename='images/' + first_image) }}" alt="Property Image" class="img-fluid">
+            <h4>{{ property['bhk'] }} BHK {{ property['furnishing'] }} {{ type_formatted }} in {{ property['area_name'] }}</h4> <!-- Use formatted type here -->
+            <p class="price">₹{{ property['price'] }}</p>
+            <a href="{{ url_for('property_details', slug=slug) }}" class="btn btn-primary mt-auto">View Details</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-3">
+      <a href="{{ url_for(region.replace('-', '_') + '_properties') }}" class="btn btn-outline-primary">Explore</a>
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+
+  <!-- Why Choose Us Section -->
+<section id="why-choose-us" class="why-choose-us-section py-5 bg-light">
+    <div class="container">
+      <h2 class="section-title text-center mb-5" style="color: #BE0C15;">Why Choose Us</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="why-card text-center p-4 h-100 shadow-sm">
+            <div class="icon mb-3">
+              <i class="fas fa-search-location fa-2x" style="color: #BE0C15;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Verified Listings</h5>
+            <p class="text-muted">Every property is manually verified for accuracy and reliability.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="why-card text-center p-4 h-100 shadow-sm">
+            <div class="icon mb-3">
+              <i class="fas fa-robot fa-2x" style="color: #BE0C15;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">AI Price Prediction</h5>
+            <p class="text-muted">Predict property prices using our advanced ML model with high accuracy.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="why-card text-center p-4 h-100 shadow-sm">
+            <div class="icon mb-3">
+              <i class="fas fa-headset fa-2x" style="color: #BE0C15;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">24/7 Support</h5>
+            <p class="text-muted">Our dedicated team is always ready to help you with any query.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="why-card text-center p-4 h-100 shadow-sm">
+            <div class="icon mb-3">
+              <i class="fas fa-handshake fa-2x" style="color: #BE0C15;"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Trusted Partners</h5>
+            <p class="text-muted">We collaborate with reliable developers and agents to ensure your safety.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Testimonials Section -->
+<section id="testimonials" class="testimonials-section py-5 bg-dark text-white">
+    <div class="container">
+      <h2 class="section-title text-center mb-5" style="color: #BE0C15;">What Our Clients Say</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 h-100 bg-white text-dark rounded shadow-sm">
+            <p class="mb-3">"The property listings are so detailed and accurate. I found my dream flat within a week!"</p>
+            <h6 class="fw-bold mb-0" style="color: #BE0C15;">Ravi Kumar</h6>
+            <small class="text-muted">Home Buyer, Delhi</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 h-100 bg-white text-dark rounded shadow-sm">
+            <p class="mb-3">"Love the price prediction feature! It gave me a clear idea of property values before buying."</p>
+            <h6 class="fw-bold mb-0" style="color: #BE0C15;">Sneha Mehta</h6>
+            <small class="text-muted">Investor, Gurgaon</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 h-100 bg-white text-dark rounded shadow-sm">
+            <p class="mb-3">"The support team helped me list my property seamlessly. Super easy and professional."</p>
+            <h6 class="fw-bold mb-0" style="color: #BE0C15;">Amit Singh</h6>
+            <small class="text-muted">Seller, Noida</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    <!-- Trusted By Section -->
+<section id="partners" class="partners-section py-5 bg-white text-center">
+    <div class="container">
+      <h2 class="section-title mb-4" style="color: #BE0C15;">Trusted By Leading Brands</h2>
+      <div class="row justify-content-center align-items-center g-4">
+        <div class="col-4 col-sm-3 col-md-2">
+          <img src="{{ url_for('static', filename='images/partner1.png') }}" class="img-fluid grayscale-logo" alt="Partner 1">
+        </div>
+        <div class="col-4 col-sm-3 col-md-2">
+          <img src="{{ url_for('static', filename='images/partner2.png') }}" class="img-fluid grayscale-logo" alt="Partner 2">
+        </div>
+        <div class="col-4 col-sm-3 col-md-2">
+          <img src="{{ url_for('static', filename='images/partner3.png') }}" class="img-fluid grayscale-logo" alt="Partner 3">
+        </div>
+        <div class="col-4 col-sm-3 col-md-2">
+          <img src="{{ url_for('static', filename='images/partner4.png') }}" class="img-fluid grayscale-logo" alt="Partner 4">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+{% include 'footer.html' %}
+</html>
+
+  
